@@ -12,7 +12,7 @@ function TemperatureFileAccessory(log, config) {
   this.log = log;
   this.name = config["name"];
   this.filePath = config["file_path"];
-
+  this.field = config["field"];
   this.service = new Service.TemperatureSensor(this.name);
 
   this.service
@@ -26,8 +26,12 @@ TemperatureFileAccessory.prototype.getState = function(callback) {
       callback(err);
       return
     }
-
-    callback(null, parseFloat(data))
+    if (data[this.field]) {
+        callback(null, parseFloat(data[this.field]))
+    }
+    else {
+        callback(null, parseFloat(data))
+    }
   })
 }
 
